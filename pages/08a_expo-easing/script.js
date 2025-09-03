@@ -1,3 +1,5 @@
+import gsap from 'gsap';
+
 // Select the main floating action button (FAB)
 const fab = document.querySelector(".fab");
 
@@ -9,8 +11,12 @@ const radius = 100;
 
 // Track whether menu is expanded or collapsed
 let expanded = false;
+let isAnimating = false;
 
 fab.addEventListener("click", () => {
+  if (isAnimating) return; // Prevent spamming clicks during animation
+  isAnimating = true;
+
   expanded = !expanded;
 
   // Toggle button symbol (＋ / ×)
@@ -30,10 +36,41 @@ fab.addEventListener("click", () => {
       const y = -Math.sin(angle) * radius;
 
       // 🔜 Animation will go here
+      gsap.to(child, {
+        x: x,
+        y: y,
+        opacity: 1,
+        scale: 1,
+        rotate: 360,
+        duration: 0.3,
+        ease: 'expo.out',
+        delay: i * 0.1,
+        onComplete: () => {
+          if (i === children.length - 1) {
+            isAnimating = false;
+          }
+        }
+      })
     });
   } else {
-    children.forEach((child) => {
+    children.forEach((child, i) => {
       // 🔜 Collapse animation will go here
+      gsap.to(child, {
+        x: 0,
+        y: 0,
+        opacity:0,
+        scale: 0.1,
+        rotate: 0,
+        duration: 0.3,
+        ease: 'expo.in',
+        pointerEvents: 'none',
+        delay: i * -0.1, // reverse order - problem with negative delay and onComplete below (unlocks the animation too early)
+        onComplete: () => {
+          if (i === children.length - 1) {
+            isAnimating = false;
+          }
+        }
+      })
     });
   }
 });
