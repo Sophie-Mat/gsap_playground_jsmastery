@@ -9,6 +9,15 @@
   box-shadow: 0 16px 32px rgba(0, 0, 0, 0.25);
 }
 
+.card-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  border-radius: 16px;
+  scale: 1;
+}
+
 .card-face {
   position: absolute;
   width: 100%;
@@ -27,9 +36,11 @@
 
 .card-front {
   background: linear-gradient(135deg, #00cec9, #0984e3);
+  opacity: 1;
 }
 
 .card-back {
+  opacity: 1;
   background: linear-gradient(135deg, #ff7675, #fd79a8);
   transform: rotateY(180deg);
 }
